@@ -4,10 +4,14 @@ import org.iesvdm.tienda.modelo.Fabricante;
 import org.iesvdm.tienda.modelo.Producto;
 import org.iesvdm.tienda.repository.FabricanteRepository;
 import org.iesvdm.tienda.repository.ProductoRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
+
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.reverseOrder;
 
 
 @SpringBootTest
@@ -84,7 +88,11 @@ class TiendaApplicationTests {
 	@Test
 	void test5() {
 		var listFabs = fabRepo.findAll();
-		//TODO		
+		var result = listFabs.stream()
+				.filter(f -> !f.getProductos().isEmpty())
+				.toList();
+
+		result.forEach(resul -> System.out.println("Código: " + resul.getCodigo()));
 	}
 	
 	/**
@@ -93,7 +101,10 @@ class TiendaApplicationTests {
 	@Test
 	void test6() {
 		var listFabs = fabRepo.findAll();
-		//TODO
+		var result = listFabs.stream()
+				.sorted(comparing(Fabricante::getNombre).reversed())
+				.toList();
+		result.forEach(resul -> System.out.println("Fabricante: " + resul.getNombre()));
 	}
 	
 	/**
@@ -102,7 +113,11 @@ class TiendaApplicationTests {
 	@Test
 	void test7() {
 		var listProds = prodRepo.findAll();
-		//TODO
+		var result = listProds.stream()
+				.sorted(comparing(Producto::getNombre)
+				.thenComparing(Producto::getPrecio, reverseOrder()))
+				.toList();
+		result.forEach(resul -> System.out.println("Producto: " + resul.getNombre()));
 	}
 	
 	/**
@@ -112,6 +127,7 @@ class TiendaApplicationTests {
 	void test8() {
 		var listFabs = fabRepo.findAll();
 		//TODO
+
 	}
 	
 	/**
@@ -120,7 +136,14 @@ class TiendaApplicationTests {
 	@Test
 	void test9() {
 		var listFabs = fabRepo.findAll();
-		//TODO		
+		var l = listFabs.stream()
+				.skip(3)
+				.limit(2)
+				.toList();
+		System.out.println(l);
+
+		Assertions.assertEquals(l.get(0).getNombre() , "Samsung");
+
 	}
 	
 	/**
@@ -129,7 +152,13 @@ class TiendaApplicationTests {
 	@Test
 	void test10() {
 		var listProds = prodRepo.findAll();
-		//TODO
+		var productoBarato = listProds.stream()
+				.sorted(comparing(Producto::getPrecio))
+				.map(producto -> "Nombre = " + producto.getNombre() + " precio = " + producto.getPrecio())
+				.limit(1)
+				.findAny();
+		System.out.println(productoBarato);
+		Assertions.assertTrue(productoBarato.orElse("").contains("59.99"));
 	}
 	
 	/**
