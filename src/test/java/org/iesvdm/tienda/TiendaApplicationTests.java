@@ -22,6 +22,8 @@ class TiendaApplicationTests {
 	
 	@Autowired
 	ProductoRepository prodRepo;
+    @Autowired
+    private ProductoRepository productoRepository;
 
 	@Test
 	void testAllFabricante() {
@@ -51,7 +53,9 @@ class TiendaApplicationTests {
 	@Test
 	void test1() {
 		var listProds = prodRepo.findAll();
-		//TODO
+		listProds.forEach( p -> {
+			System.out.println("Fabricante: "+ p.getFabricante() + " Precio Producto: " + p.getPrecio());
+		});
 	}
 	
 	
@@ -61,7 +65,9 @@ class TiendaApplicationTests {
 	@Test
 	void test2() {
 		var listProds = prodRepo.findAll();
-		//TODO
+		listProds.forEach( p -> {
+			System.out.println("Producto: "+ p.getNombre() + " Precio: "+ p.getPrecio()*1.08 + "$"); //1.08 es a como esta el dólar a día de hoy.
+		});
 	}
 	
 	/**
@@ -70,7 +76,9 @@ class TiendaApplicationTests {
 	@Test
 	void test3() {
 		var listProds = prodRepo.findAll();
-		//TODO
+		listProds.forEach( p -> {
+			System.out.println("Producto: "+ p.getNombre().toUpperCase() + " Precio: "+ p.getPrecio());
+		});
 	}
 	
 	/**
@@ -79,9 +87,13 @@ class TiendaApplicationTests {
 	@Test
 	void test4() {
 		var listFabs = fabRepo.findAll();
-		//TODO
-	}
-	
+		var result = listFabs.stream();
+		result.forEach(fabricante -> {
+			String nombre = fabricante.getNombre();
+			System.out.println(nombre + " - " + nombre.substring(0,2).toUpperCase());
+		});
+
+		}
 	/**
 	 * 5. Lista el código de los fabricantes que tienen productos.
 	 */
@@ -126,7 +138,10 @@ class TiendaApplicationTests {
 	@Test
 	void test8() {
 		var listFabs = fabRepo.findAll();
-		//TODO
+		var result = listFabs.stream().toList();
+		for (int i = 0; i < 5; i++) {
+			System.out.println("Fabricante: " + result.get(i).getNombre());
+		}
 
 	}
 	
