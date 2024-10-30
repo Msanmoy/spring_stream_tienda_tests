@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.reverseOrder;
@@ -211,11 +212,12 @@ class TiendaApplicationTests {
 	void test13() {
 		var listProds = prodRepo.findAll();
 		var filtro = listProds.stream()
-				.sorted(comparing(producto -> producto.getPrecio() <= 120))
+				.filter(producto -> producto.getPrecio() <= 120)
 				.toList();
 
 		filtro.forEach(producto -> System.out.println(producto.getNombre()));
 
+		Assertions.assertEquals(3, filtro.size());
 	}
 	
 	/**
@@ -224,7 +226,11 @@ class TiendaApplicationTests {
 	@Test
 	void test14() {
 		var listProds = prodRepo.findAll();
-		//TODO
+		var result = listProds.stream()
+				.filter(producto -> producto.getPrecio() >= 400)
+				.toList();
+
+		result.forEach(producto -> System.out.println(producto.getNombre()));
 	}
 	
 	/**
@@ -233,7 +239,12 @@ class TiendaApplicationTests {
 	@Test
 	void test15() {
 		var listProds = prodRepo.findAll();
-		//TODO
+		var filtro = listProds.stream()
+				.filter(producto -> producto.getPrecio() <= 300 && producto.getPrecio() >= 80)
+				.toList();
+
+		filtro.forEach(producto -> System.out.println(producto.getNombre()));
+
 	}
 	
 	/**
@@ -242,8 +253,14 @@ class TiendaApplicationTests {
 	@Test
 	void test16() {
 		var listProds = prodRepo.findAll();
-		//TODO
-	}
+		var result = listProds.stream()
+				.filter(producto -> producto.getPrecio() > 200 && producto.getCodigo() == 6)
+				.toList();
+
+		result.forEach(producto -> System.out.println(producto.getNombre()));
+
+		}
+
 	
 	/**
 	 * 17. Lista todos los productos donde el código de fabricante sea 1, 3 o 5 utilizando un Set de codigos de fabricantes para filtrar.
@@ -251,7 +268,14 @@ class TiendaApplicationTests {
 	@Test
 	void test17() {
 		var listProds = prodRepo.findAll();
-		//TODO
+		Set<Integer> codigo = Set.of(1,3,5);
+
+		var result = listProds.stream()
+				.filter(producto -> codigo.contains(producto.getCodigo()))
+				.toList();
+
+		result.forEach(producto -> System.out.println(producto.getNombre()));
+
 	}
 	
 	/**
@@ -260,7 +284,12 @@ class TiendaApplicationTests {
 	@Test
 	void test18() {
 		var listProds = prodRepo.findAll();
-		//TODO
+		var result = listProds.parallelStream()
+				.map(producto -> "Nombre = " + producto.getNombre() + " precio = " + producto.getPrecio()*100)
+				.toList();
+
+		result.forEach(s -> System.out.println(s));
+		Assertions.assertEquals(11, result.size());
 	}
 	
 	
