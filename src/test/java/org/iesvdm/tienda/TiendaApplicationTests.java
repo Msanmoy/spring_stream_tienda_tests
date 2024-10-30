@@ -341,9 +341,18 @@ class TiendaApplicationTests {
 	 * 22. Lista el nombre y el precio de todos los productos que tengan un precio mayor o igual a 180€. 
 	 * Ordene el resultado en primer lugar por el precio (en orden descendente) y en segundo lugar por el nombre (en orden ascendente).
 	 */
+
+	@Test
 	void test22() {
 		var listProds = prodRepo.findAll();
-		//TODO
+		var result = listProds.stream()
+				.filter(producto -> producto.getPrecio() >= 180)
+				.sorted(comparing(Producto::getPrecio))
+
+				.toList();
+
+		result.forEach(producto -> System.out.println(producto.getNombre()));
+		result.forEach(producto -> System.out.println(producto.getPrecio()));
 	}
 	
 	/**
@@ -353,7 +362,7 @@ class TiendaApplicationTests {
 	@Test
 	void test23() {
 		var listProds = prodRepo.findAll();
-		//TODO
+
 	}
 	
 	/**
