@@ -299,7 +299,14 @@ class TiendaApplicationTests {
 	@Test
 	void test19() {
 		var listFabs = fabRepo.findAll();
-		//TODOS
+		var result = listFabs.stream()
+				.filter(fabricante -> fabricante.getNombre().substring(0,1).equalsIgnoreCase("s"))
+				.toList();
+		result.forEach(producto -> System.out.println(producto.getNombre()));
+
+		Assertions.assertEquals(2, result.size());
+		Assertions.assertTrue(result.stream().anyMatch(fabricante -> fabricante.getNombre().equalsIgnoreCase("Samsung")));
+		Assertions.assertTrue(result.stream().anyMatch(fabricante -> fabricante.getNombre().equalsIgnoreCase("Seagate")));
 	}
 	
 	/**
@@ -308,7 +315,12 @@ class TiendaApplicationTests {
 	@Test
 	void test20() {
 		var listProds = prodRepo.findAll();
-		//TODO
+		var result = listProds.stream()
+				.filter(producto -> producto.getNombre().contains("Portátil"))
+				.toList();
+		result.forEach(producto -> System.out.println(producto.getNombre()));
+
+		Assertions.assertEquals(2, result.size());
 	}
 	
 	/**
@@ -317,7 +329,12 @@ class TiendaApplicationTests {
 	@Test
 	void test21() {
 		var listProds = prodRepo.findAll();
-		//TODO
+		var result = listProds.stream()
+				.filter(producto -> producto.getPrecio() <= 215 && producto.getNombre().contains("Monitor"))
+				.toList();
+		result.forEach(producto -> System.out.println(producto.getNombre()));
+
+		Assertions.assertEquals(1, result.size());
 	}
 	
 	/**
