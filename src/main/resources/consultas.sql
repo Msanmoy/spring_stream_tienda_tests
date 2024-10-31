@@ -1,18 +1,25 @@
 use tienda;
 
 /* Test 1 */
+SELECT nombre, precio from producto;
 
 /* Test 2 */
+SELECT codigo, nombre, precio*1.08, codigo_fabricante from producto;
 
 /* Test 3 */
+SELECT UPPER(nombre), precio from producto;
 
 /* Test 4 */
+SELECT nombre, UPPER(SUBSTR(nombre, 1, 2)) from fabricante;
 
 /* Test 5 */
+SELECT DISTINCT f.codigo from fabricante as f join producto as p on f.codigo = p.codigo_fabricante;
 
 /* Test 6 */
+SELECT nombre from fabricante ORDER BY nombre DESC;
 
 /* Test 7 */
+SELECT nombre from producto ORDER BY nombre ASC, precio DESC;
 
 /* Test 8 */
 SELECT * from fabricante limit 5;
@@ -51,8 +58,10 @@ SELECT p.nombre, p.precio*100 from producto as p;
 SELECT f.nombre from fabricante as f where nombre LIKE 's%' OR nombre LIKE 'S%' ;
 
 /* Test 20 */
+SELECT * from producto where nombre like '%Portátil%';
 
 /* Test 21 */
+SELECT nombre from producto where nombre like '%Monitor%' AND precio < 215;
 
 /* Test 22 */
 SELECT p.nombre, p.precio FROM producto AS p WHERE p.precio >= 180 ORDER BY precio DESC, nombre ASC;
@@ -73,8 +82,10 @@ SELECT * FROM producto as p join tienda.fabricante f on f.codigo = p.codigo_fabr
 SELECT p.nombre, p.precio FROM producto AS p JOIN tienda.fabricante f on f.codigo = p.codigo_fabricante WHERE p.precio >= 180 ORDER BY p.precio DESC, p.nombre ASC;
 
 /* Test 28 */
-    SELECT fabricante.nombre, producto.nombre FROM fabricante join producto on fabricante.codigo = producto.codigo_fabricante;
+SELECT fabricante.nombre, producto.nombre FROM fabricante join producto on fabricante.codigo = producto.codigo_fabricante;
 
 /* Test 29 */
+SELECT f.* FROM fabricante f LEFT JOIN producto p ON f.codigo = p.codigo_fabricante WHERE p.codigo_fabricante IS NULL;
 
 /* Test 30 */
+SELECT COUNT(*) from producto;

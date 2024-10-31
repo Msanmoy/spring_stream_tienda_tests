@@ -386,6 +386,8 @@ class TiendaApplicationTests {
 				.stream().toList();
 		result.forEach(producto -> System.out.println(producto.getNombre() + " " + producto.getPrecio() + " " + producto.getFabricante().getNombre()));
 
+		Assertions.assertEquals(1, result.size());
+
 	}
 	
 	/**
@@ -529,7 +531,14 @@ Fabricante: Xiaomi
 	@Test
 	void test29() {
 		var listFabs = fabRepo.findAll();
-		//TODO
+		var result = listFabs.stream()
+				.filter(fabricante -> fabricante.getProductos().contains(0))
+				.toList();
+
+		result.forEach(fabricante -> System.out.println(fabricante.getNombre()));
+
+
+
 	}
 	
 	/**
@@ -538,7 +547,13 @@ Fabricante: Xiaomi
 	@Test
 	void test30() {
 		var listProds = prodRepo.findAll();
-		//TODO
+		var result = listProds.stream()
+				.count();
+
+		System.out.println(result);
+
+		Assertions.assertEquals(11, result);
+
 	}
 
 	
