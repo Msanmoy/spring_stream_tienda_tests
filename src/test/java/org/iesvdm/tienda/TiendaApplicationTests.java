@@ -698,7 +698,20 @@ Hewlett-Packard              2
 	@Test
 	void test38() {
 		var listFabs = fabRepo.findAll();
-		//TODO
+		// Imprimimos el encabezado
+		System.out.println("Fabricante       #Productos");
+		System.out.println("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
+
+		var result = listFabs.stream()
+				.map(fabricante -> Map.entry(fabricante.getNombre(),
+						fabricante.getProductos() != null ? fabricante.getProductos().size() : 0))
+				.sorted((entry1, entry2) -> Integer.compare(entry2.getValue(), entry1.getValue()))
+				.toList();
+
+		for (var entry : result) {
+			System.out.println(String.format("%-15s %10d", entry.getKey(), entry.getValue()));
+		}
+
 	}
 	
 	/**
@@ -709,7 +722,33 @@ Hewlett-Packard              2
 	@Test
 	void test39() {
 		var listFabs = fabRepo.findAll();
-		//TODO
+
+		System.out.println("Fabricante         Precio Mínimo     Precio Máximo     Precio Medio");
+		System.out.println("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-");
+
+		listFabs.stream().forEach(fabricante -> {
+			Double[] stats = fabricante.getProductos().stream()
+					.map(producto -> producto.getPrecio())
+					.reduce(new Double[]{Double.MAX_VALUE, Double.MIN_VALUE, 0.0, 0.0},
+							(acc, precio) -> {
+								acc[0] = Math.min(acc[0], precio);
+								acc[1] = Math.max(acc[1], precio);
+								acc[2] += precio;
+								acc[3] += 1;
+								return acc;
+							},
+							(acc1, acc2) -> acc1
+					);
+
+			double precioMedio = stats[3] > 0 ? stats[2] / stats[3] : 0.0;
+			double precioMin = stats[3] > 0 ? stats[0] : 0.0;
+			double precioMax = stats[3] > 0 ? stats[1] : 0.0;
+
+
+			System.out.println(String.format("%-15s %15.2f %15.2f %15.2f",
+					fabricante.getNombre(), precioMin, precioMax, precioMedio));
+		});
+
 	}
 	
 	/**
@@ -719,7 +758,34 @@ Hewlett-Packard              2
 	@Test
 	void test40() {
 		var listFabs = fabRepo.findAll();
-		//TODO
+		System.out.println("Fabricante         Precio Mínimo     Precio Máximo     Precio Medio");
+		System.out.println("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-");
+
+		listFabs.stream().forEach(fabricante -> {
+			Double[] stats = fabricante.getProductos().stream()
+					.filter(p -> p.getPrecio() > 200)
+					.map(producto -> producto.getPrecio())
+					.reduce(new Double[]{Double.MAX_VALUE, Double.MIN_VALUE, 0.0, 0.0},
+							(acc, precio) -> {
+								acc[0] = Math.min(acc[0], precio);
+								acc[1] = Math.max(acc[1], precio);
+								acc[2] += precio;
+								acc[3] += 1;
+								return acc;
+							},
+							(acc1, acc2) -> acc1
+					);
+
+			double precioMedio = stats[3] > 0 ? stats[2] / stats[3] : 0.0;
+			double precioMin = stats[3] > 0 ? stats[0] : 0.0;
+			double precioMax = stats[3] > 0 ? stats[1] : 0.0;
+
+
+			System.out.println(String.format("%-15s %15.2f %15.2f %15.2f",
+					fabricante.getCodigo(), precioMin, precioMax, precioMedio));
+		});
+
+
 	}
 	
 	/**
@@ -728,7 +794,11 @@ Hewlett-Packard              2
 	@Test
 	void test41() {
 		var listFabs = fabRepo.findAll();
-		//TODO
+		var result = listFabs.stream()
+				.filter(fabricante -> fabricante.getProductos().size() >= 2)
+				.toList();
+
+		result.forEach(System.out::println);
 	}
 	
 	/**

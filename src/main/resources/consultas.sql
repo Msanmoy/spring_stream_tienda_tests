@@ -115,10 +115,13 @@ SELECT MAX(p.precio), MIN(p.precio), AVG(p.precio), COUNT(*) from producto as p 
 SELECT f.nombre AS fabricante, COUNT(p.codigo) AS total_productos FROM fabricante as f LEFT JOIN producto p ON f.codigo = p.codigo_fabricante GROUP BY f.codigo, f.nombre ORDER BY f.nombre;
 
 /* Test 39 */
+SELECT f.nombre, MIN(p.precio), MAX(p.precio), AVG(p.precio) from fabricante as f left join tienda.producto p on f.codigo = p.codigo_fabricante GROUP BY f.nombre ;
 
 /* Test 40 */
+SELECT f.codigo, MAX(p.precio), MIN(p.precio), AVG(p.precio), COUNT(*) from fabricante as f left join tienda.producto p on f.codigo = p.codigo_fabricante WHERE precio > 200 GROUP BY f.codigo;
 
 /* Tets 41 */
+SELECT fabricante.nombre FROM fabricante JOIN producto ON fabricante.codigo = producto.codigo_fabricante GROUP BY fabricante.nombre HAVING COUNT(producto.codigo) >= 2;
 
 /* Test 42 */
 
