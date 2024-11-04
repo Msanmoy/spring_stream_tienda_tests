@@ -89,3 +89,43 @@ SELECT f.* FROM fabricante f LEFT JOIN producto p ON f.codigo = p.codigo_fabrica
 
 /* Test 30 */
 SELECT COUNT(*) from producto;
+
+/* Test 31 */
+SELECT COUNT(distinct codigo_fabricante) from producto;
+
+/* Test 32 */
+SELECT AVG(producto.precio) from producto;
+
+/* Test 33 */
+SELECT MIN(producto.precio) from producto;
+
+/* Test 34 */
+SELECT min(producto.precio) from producto;
+
+/* Test 35 */
+SELECT count(*) from producto where codigo_fabricante = (Select fabricante.codigo from fabricante where fabricante.nombre = 'Asus');
+
+/* Test 36 */
+SELECT avg(p.precio) from producto as p join tienda.fabricante f on f.codigo = p.codigo_fabricante where f.nombre = 'Asus';
+
+/* Test 37 */
+SELECT MAX(p.precio), MIN(p.precio), AVG(p.precio), COUNT(*) from producto as p join tienda.fabricante f on f.codigo = p.codigo_fabricante where f.nombre = 'Crucial';
+
+/* Test 38 */
+SELECT f.nombre AS fabricante, COUNT(p.codigo) AS total_productos FROM fabricante as f LEFT JOIN producto p ON f.codigo = p.codigo_fabricante GROUP BY f.codigo, f.nombre ORDER BY f.nombre;
+
+/* Test 39 */
+
+/* Test 40 */
+
+/* Tets 41 */
+
+/* Test 42 */
+
+/* Test 43 */
+
+/* Test 44 */
+
+/* Test 45 */
+
+/* Test 46 */
