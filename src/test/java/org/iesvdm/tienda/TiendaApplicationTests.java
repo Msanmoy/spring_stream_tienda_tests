@@ -830,7 +830,19 @@ Hewlett-Packard              2
 	@Test
 	void test43() {
 		var listFabs = fabRepo.findAll();
-		var result = listFabs.stream();
+		var result = listFabs.stream()
+				.filter(fabricante -> fabricante.getProductos().stream()
+								.mapToDouble(producto -> producto.getPrecio())
+								.sum() > 1000
+				)
+				.map(fabricante -> fabricante.getNombre())
+				.collect(Collectors.toList());
+
+		result.forEach(System.out::println);
+
+		Assertions.assertEquals("Lenovo",result.get(0));
+
+
 	}
 	
 	/**
@@ -840,7 +852,22 @@ Hewlett-Packard              2
 	@Test
 	void test44() {
 		var listFabs = fabRepo.findAll();
-		//TODO	
+		var result = listFabs.stream()
+				.filter(fabricante -> fabricante.getProductos().stream()
+						.mapToDouble(producto -> producto.getPrecio())
+						.sum() > 1000
+				)
+				.sorted(Comparator.comparingDouble(fabricante ->
+						fabricante.getProductos().stream()
+								.mapToDouble(producto -> producto.getPrecio())
+								.sum()
+				))
+				.map(fabricante -> fabricante.getNombre())
+				.collect(Collectors.toList());
+
+		result.forEach(System.out::println);
+
+		Assertions.assertEquals("Lenovo",result.get(0));
 	}
 	
 	/**
@@ -851,7 +878,31 @@ Hewlett-Packard              2
 	@Test
 	void test45() {
 		var listFabs = fabRepo.findAll();
-		//TODO
+		var result = listFabs.stream()
+				.flatMap(fabricante -> fabricante.getProductos().stream()
+						.map(producto -> Map.of(
+								"nombreProducto", producto.getNombre(),
+								"precio", producto.getPrecio(),
+								"nombreFabricante", fabricante.getNombre()
+						))
+				)
+				.collect(Collectors.groupingBy(
+						productoMap -> productoMap.get("nombreFabricante"),
+						Collectors.reducing((p1, p2) ->
+								(Double) p1.get("precio") >= (Double) p2.get("precio") ? p1 : p2
+						)
+				))
+				.values().stream()
+				.filter(Optional::isPresent)
+				.map(Optional::get)
+				.sorted(Comparator.comparing(o -> (String) o.get("nombreFabricante")))
+				.collect(Collectors.toList());
+
+		result.forEach(item ->
+				System.out.println("Producto: " + item.get("nombreProducto") +
+						", Precio: " + item.get("precio") +
+						", Fabricante: " + item.get("nombreFabricante"))
+		);
 	}
 	
 	/**
@@ -861,7 +912,34 @@ Hewlett-Packard              2
 	@Test
 	void test46() {
 		var listFabs = fabRepo.findAll();
-		//TODO
+		var promedioPorFabricante = listFabs.stream()
+				.collect(Collectors.toMap(
+						fabricante -> fabricante.getNombre(),
+						fabricante -> fabricante.getProductos().stream()
+								.mapToDouble(producto -> producto.getPrecio())
+								.average().orElse(0) // Media de precios por fabricante
+				));
+
+		// Paso 2: Filtrar productos que tienen un precio mayor o igual a la media
+		var result = listFabs.stream()
+				.flatMap(fabricante -> fabricante.getProductos().stream()
+						.filter(producto -> producto.getPrecio() >= promedioPorFabricante.get(fabricante.getNombre())) // Filtramos por precio
+						.map(producto -> Map.of(
+								"nombreProducto", producto.getNombre(),
+								"precio", producto.getPrecio(),
+								"nombreFabricante", fabricante.getNombre()
+						))
+				)
+				.sorted((o1, o2) -> o2.size() - o1.size())
+
+				.collect(Collectors.toList());
+
+		// Mostrar resultados
+		result.forEach(item ->
+				System.out.println("Producto: " + item.get("nombreProducto") +
+						", Precio: " + item.get("precio") +
+						", Fabricante: " + item.get("nombreFabricante"))
+		);
 	}
 
 }

@@ -127,9 +127,13 @@ SELECT fabricante.nombre FROM fabricante JOIN producto ON fabricante.codigo = pr
 SELECT fabricante.nombre, COUNT(producto.codigo) AS num FROM fabricante LEFT JOIN producto ON fabricante.codigo = producto.codigo_fabricante WHERE producto.precio >= 220 GROUP BY fabricante.nombre ORDER BY num DESC;
 
 /* Test 43 */
+SELECT f.nombre from fabricante as f join tienda.producto p on f.codigo = p.codigo_fabricante group by f.nombre having sum(precio) > 1000;
 
 /* Test 44 */
+SELECT f.nombre from fabricante as f join tienda.producto p on f.codigo = p.codigo_fabricante group by f.nombre having sum(precio) > 1000 ORDER BY sum(precio) ASC;
 
 /* Test 45 */
+SELECT p.nombre AS nombreProducto, p.precio, f.nombre AS nombreFabricante FROM tienda.producto p JOIN fabricante f ON p.codigo_fabricante = f.codigo WHERE p.precio = (SELECT MAX(precio) FROM tienda.producto WHERE codigo_fabricante = f.codigo) ORDER BY f.nombre ASC;
 
 /* Test 46 */
+SELECT p.nombre AS nombreProducto, p.precio, f.nombre AS nombreFabricante FROM tienda.producto p JOIN fabricante f ON p.codigo_fabricante = f.codigo WHERE p.precio >= ( SELECT AVG(precio) FROM tienda.producto WHERE codigo_fabricante = f.codigo) ORDER BY f.nombre ASC, p.precio DESC;
