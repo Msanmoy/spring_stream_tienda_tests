@@ -124,6 +124,7 @@ SELECT f.codigo, MAX(p.precio), MIN(p.precio), AVG(p.precio), COUNT(*) from fabr
 SELECT fabricante.nombre FROM fabricante JOIN producto ON fabricante.codigo = producto.codigo_fabricante GROUP BY fabricante.nombre HAVING COUNT(producto.codigo) >= 2;
 
 /* Test 42 */
+SELECT fabricante.nombre, COUNT(producto.codigo) AS num FROM fabricante LEFT JOIN producto ON fabricante.codigo = producto.codigo_fabricante WHERE producto.precio >= 220 GROUP BY fabricante.nombre ORDER BY num DESC;
 
 /* Test 43 */
 
